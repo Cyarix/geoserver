@@ -13,6 +13,7 @@ import org.geoserver.config.DefaultGeoServerLoader;
 import org.geoserver.config.GeoServer;
 import org.geoserver.config.GeoServerFacade;
 import org.geoserver.config.ServiceInfo;
+import org.geoserver.config.impl.GeoServerEnvironmentAwareFacadeWrapper;
 import org.geoserver.config.impl.GeoServerImpl;
 import org.geoserver.config.util.XStreamPersister;
 import org.geoserver.config.util.XStreamServiceLoader;
@@ -63,7 +64,7 @@ public class JDBCGeoServerLoader extends DefaultGeoServerLoader {
     }
 
     public void setGeoServerFacade(GeoServerFacade geoServerFacade) {
-        this.geoServerFacade = geoServerFacade;
+        this.geoServerFacade = new GeoServerEnvironmentAwareFacadeWrapper(geoServerFacade);
     }
 
     @Override

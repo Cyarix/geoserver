@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.DataLinkInfo;
 import org.geoserver.catalog.KeywordInfo;
 import org.geoserver.catalog.MetadataLinkInfo;
 import org.geoserver.catalog.MetadataMap;
@@ -27,7 +28,6 @@ import org.opengis.feature.type.Name;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Envelope;
-import org.geoserver.catalog.DataLinkInfo;
 
 /**
  * Default implementation of {@link ResourceInfo}.
@@ -376,35 +376,21 @@ public abstract class ResourceInfoImpl implements ResourceInfo {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((_abstract == null) ? 0 : _abstract.hashCode());
+        result = prime * result + ((_abstract == null) ? 0 : _abstract.hashCode());
         result = prime * result + ((alias == null) ? 0 : alias.hashCode());
-        result = prime * result
-                + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + (enabled ? 1231 : 1237);
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result
-                + ((keywords == null) ? 0 : keywords.hashCode());
-        result = prime
-                * result
-                + ((latLonBoundingBox == null) ? 0 : latLonBoundingBox
-                        .hashCode());
+        result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
+        result = prime * result + ((latLonBoundingBox == null) ? 0 : latLonBoundingBox.hashCode());
         result = prime * result
                 + ((metadataLinks == null) ? 0 : metadataLinks.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result
-                + ((namespace == null) ? 0 : namespace.hashCode());
-        result = prime
-                * result
-                + ((nativeBoundingBox == null) ? 0 : nativeBoundingBox
-                        .hashCode());
-        result = prime * result
-                + ((nativeCRS == null) ? 0 : nativeCRS.hashCode());
-        result = prime * result
-                + ((nativeName == null) ? 0 : nativeName.hashCode());
-        result = prime
-                * result
-                + ((projectionPolicy == null) ? 0 : projectionPolicy.hashCode());
+        result = prime * result + ((namespace == null) ? 0 : namespace.hashCode());
+        result = prime * result + ((nativeBoundingBox == null) ? 0 : nativeBoundingBox.hashCode());
+        result = prime * result + ((nativeCRS == null) ? 0 : nativeCRS.hashCode());
+        result = prime * result + ((nativeName == null) ? 0 : nativeName.hashCode());
+        result = prime * result + ((projectionPolicy == null) ? 0 : projectionPolicy.hashCode());
         result = prime * result + ((srs == null) ? 0 : srs.hashCode());
         result = prime * result + ((store == null) ? 0 : store.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());

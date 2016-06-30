@@ -59,7 +59,7 @@ public class GeoServerImpl implements GeoServer, ApplicationContextAware {
     List<ConfigurationListener> listeners = new ArrayList<ConfigurationListener>();
 
     public GeoServerImpl() {
-        this.facade = new DefaultGeoServerFacade(this);
+        this.facade = new GeoServerEnvironmentAwareFacadeWrapper(new DefaultGeoServerFacade(this));
     }
     
     public GeoServerFacade getFacade() {
@@ -67,7 +67,7 @@ public class GeoServerImpl implements GeoServer, ApplicationContextAware {
     }
     
     public void setFacade(GeoServerFacade facade) {
-        this.facade = facade;
+        this.facade = new GeoServerEnvironmentAwareFacadeWrapper(facade);
         facade.setGeoServer(this);
     }
     

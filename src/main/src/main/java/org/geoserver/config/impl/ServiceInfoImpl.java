@@ -9,15 +9,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import org.apache.commons.lang.SerializationUtils;
+import org.geoserver.catalog.Keyword;
 import org.geoserver.catalog.KeywordInfo;
 import org.geoserver.catalog.MetadataLinkInfo;
 import org.geoserver.catalog.MetadataMap;
 import org.geoserver.catalog.WorkspaceInfo;
+import org.geoserver.catalog.impl.MetadataLinkInfoImpl;
 import org.geoserver.config.GeoServer;
 import org.geoserver.config.ServiceInfo;
+import org.geoserver.platform.GeoServerEnvironment;
+import org.geoserver.platform.GeoServerExtensions;
+import org.geotools.util.logging.Logging;
 
 public class ServiceInfoImpl implements ServiceInfo {
+
+    static final Logger LOGGER = Logging.getLogger(ServiceInfoImpl.class);
 
     protected String id;
 
@@ -248,34 +257,25 @@ public class ServiceInfoImpl implements ServiceInfo {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((abstrct == null) ? 0 : abstrct.hashCode());
-        result = prime
-                * result
-                + ((accessConstraints == null) ? 0 : accessConstraints
-                        .hashCode());
+        result = prime * result
+                + ((accessConstraints == null) ? 0 : accessConstraints.hashCode());
         result = prime * result + (citeCompliant ? 1231 : 1237);
         result = prime * result + (enabled ? 1231 : 1237);
-        result = prime
-                * result
-                + ((exceptionFormats == null) ? 0 : exceptionFormats.hashCode());
+        result = prime * result + ((exceptionFormats == null) ? 0 : exceptionFormats.hashCode());
         result = prime * result + ((fees == null) ? 0 : fees.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result
-                + ((keywords == null) ? 0 : keywords.hashCode());
-        result = prime * result
-                + ((maintainer == null) ? 0 : maintainer.hashCode());
-        result = prime * result
-                + ((metadataLink == null) ? 0 : metadataLink.hashCode());
+        result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
+        result = prime * result + ((maintainer == null) ? 0 : maintainer.hashCode());
+        result = prime * result + ((metadataLink == null) ? 0 : metadataLink.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result
                 + ((onlineResource == null) ? 0 : onlineResource.hashCode());
-        result = prime * result
-                + ((outputStrategy == null) ? 0 : outputStrategy.hashCode());
+        result = prime * result + ((outputStrategy == null) ? 0 : outputStrategy.hashCode());
         result = prime * result
                 + ((schemaBaseURL == null) ? 0 : schemaBaseURL.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + (verbose ? 1231 : 1237);
-        result = prime * result
-                + ((versions == null) ? 0 : versions.hashCode());
+        result = prime * result + ((versions == null) ? 0 : versions.hashCode());
         return result;
     }
 
@@ -377,5 +377,64 @@ public class ServiceInfoImpl implements ServiceInfo {
     public String toString() {
         return new StringBuilder(getClass().getSimpleName()).append('[').append(name).append(']')
                 .toString();
+    }
+
+    @Override
+    public ServiceInfo clone(boolean allowEnvParametrization) {
+
+        final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
+
+        ServiceInfo target = (ServiceInfo) SerializationUtils.clone(this);
+
+        if (target != null) {
+            if (allowEnvParametrization && gsEnvironment != null
+                    && GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
+                target.setName((String) gsEnvironment.resolveValue(name));
+                target.setTitle((String) gsEnvironment.resolveValue(title));
+                target.setMaintainer((String) gsEnvironment.resolveValue(maintainer));
+                target.setAbstract((String) gsEnvironment.resolveValue(abstrct));
+                target.setAccessConstraints((String) gsEnvironment.resolveValue(accessConstraints));
+                target.setFees((String) gsEnvironment.resolveValue(fees));
+                target.setOnlineResource((String) gsEnvironment.resolveValue(onlineResource));
+                target.setSchemaBaseURL((String) gsEnvironment.resolveValue(schemaBaseURL));
+            }
+
+            List<KeywordInfo> kws = null;
+            if (keywords != null) {
+                kws = new ArrayList<KeywordInfo>();
+                if (allowEnvParametrization && gsEnvironment != null
+                        && GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
+                    for (KeywordInfo kw : keywords) {
+                        Keyword expandedKw = new Keyword((String) gsEnvironment.resolveValue(kw.getValue()));
+                        expandedKw.setLanguage((String) gsEnvironment.resolveValue(kw.getLanguage()));
+                        expandedKw.setVocabulary((String) gsEnvironment.resolveValue(kw.getVocabulary()));
+                        kws.add(expandedKw);
+                    }
+                } else {
+                    kws.addAll(keywords);
+                }
+            }
+
+            MetadataLinkInfo mdl = null;
+            if (metadataLink != null) {
+                mdl = new MetadataLinkInfoImpl();
+                if (allowEnvParametrization && gsEnvironment != null
+                        && GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
+                    mdl.setType((String) gsEnvironment.resolveValue(metadataLink.getType()));
+                    mdl.setContent((String) gsEnvironment.resolveValue(metadataLink.getContent()));
+                    mdl.setMetadataType((String) gsEnvironment.resolveValue(metadataLink.getMetadataType()));
+                    mdl.setAbout((String) gsEnvironment.resolveValue(metadataLink.getAbout()));
+                } else {
+                    mdl = metadataLink;
+                }
+            }
+
+            target.setMetadataLink(mdl);
+            ((ServiceInfoImpl) target).setKeywords(kws);
+        }
+        
+        target.setGeoServer(geoServer);
+
+        return target;
     }
 }

@@ -230,6 +230,4 @@ public class DecoratingWMSLayerInfo extends AbstractDecorator<WMSLayerInfo> impl
     public void setAdvertised(boolean advertised) {
         delegate.setAdvertised(advertised);
     }
-
-
 }

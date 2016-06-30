@@ -23,9 +23,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.opengis.wcs10.CapabilitiesSectionType;
-import net.opengis.wcs10.GetCapabilitiesType;
-
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CoverageInfo;
 import org.geoserver.catalog.CoverageStoreInfo;
@@ -35,8 +32,8 @@ import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.util.ReaderDimensionsAccessor;
 import org.geoserver.config.ContactInfo;
 import org.geoserver.config.GeoServer;
-import org.geoserver.config.SettingsInfo;
 import org.geoserver.config.ResourceErrorHandling;
+import org.geoserver.config.SettingsInfo;
 import org.geoserver.ows.URLMangler.URLType;
 import org.geoserver.wcs.WCSInfo;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
@@ -52,6 +49,9 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import net.opengis.wcs10.CapabilitiesSectionType;
+import net.opengis.wcs10.GetCapabilitiesType;
 
 /**
  * Based on the <code>org.geotools.xml.transform</code> framework, does the job of encoding a WCS
